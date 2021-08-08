@@ -19,6 +19,7 @@ import time
 
 import keyboard
 from ._keyboard_event import KeyboardEvent, KEY_DOWN, KEY_UP
+from ._canonical_names import normalize_name
 
 dummy_keys = {
     'space': [(0, [])],
@@ -39,6 +40,8 @@ dummy_keys = {
     'left ctrl': [(7, [])],
 
     'backspace': [(8, [])],
+    'delete': [(8, [])],
+
     'caps lock': [(9, [])],
 
     '+': [(10, [])],
@@ -493,7 +496,8 @@ class TestKeyboard(unittest.TestCase):
     def test_get_hotkey_name_duplicated(self):
         self.assertEqual(keyboard.get_hotkey_name(['+', 'plus']), 'plus')
     def test_get_hotkey_name_full(self):
-        self.assertEqual(keyboard.get_hotkey_name(['+', 'left ctrl', 'shift', 'WIN', 'right alt']), 'ctrl+alt+shift+windows+plus')
+        expected = 'ctrl+alt+shift+{}+plus'.format(normalize_name('WIN'))
+        self.assertEqual(keyboard.get_hotkey_name(['+', 'left ctrl', 'shift', 'WIN', 'right alt']), expected)
     def test_get_hotkey_name_multiple(self):
         self.assertEqual(keyboard.get_hotkey_name(['ctrl', 'b', '!', 'a']), 'ctrl+!+a+b')
     def test_get_hotkey_name_from_pressed(self):
